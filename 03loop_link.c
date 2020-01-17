@@ -54,27 +54,51 @@ node_t* initNode(int n)
 }
 #endif
 
-void findAndKillK(node_t* p)
+void findAndKill(node_t* p, int k, int m)
 {
-
+	//找到链表第一个节点的上一个节点，为删除做准备
+	node_t* tail = p;
+	while(tail->next != p)
+	{
+		tail = tail->next;
+	}
+	//找到编号为k的节点
+	node_t* q = p;
+	while(q->num != k)
+	{	
+		tail = q;
+		q = q->next;
+	}
+	//从编号为k的节点开始，只要符合q->next==q时，说明链表中除了p节点，所有编号都出列了
+	while(q->next != q)
+	{
+		//找到从q报数1开始,报m的节点，并且要知道m-1的节点位置tail，方便删除
+		for(int i = 1; i < m; i++)
+		{	
+			tail = q;
+			q = q->next;
+		}
+		tail->next = q->next;//从链表上将q节点摘除
+		printf("%d出列\n", q->num);
+		free(q);
+		q = tail->next;
+	}
+	printf("%d胜出!\n", q->num);
 }
 
 int main()
 {
 	int n = 0;
+	int k = 0;
+	int m = 0;
 	printf("请输入圆桌上的人数:");
 	scanf("%d", &n);
 	printf("从第k人开始报数(k>1且k<%d):", n);
 	node_t *p = initNode(n);
-	
-
-
-	printf("%d\n", p->num);
-	printf("%d\n", p->next->num);
-	printf("%d\n", p->next->next->num);
-	printf("%d\n", p->next->next->next->num);
-	printf("%d\n", p->next->next->next->next->num);
-	printf("%d\n", p->next->next->next->next->next->num);
+	scanf("%d", &k);
+	printf("数到m的人出列:");
+	scanf("%d", &m);
+	findAndKill(p, k, m);
 
 	return 0;
 }
