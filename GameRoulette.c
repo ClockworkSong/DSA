@@ -52,20 +52,34 @@ int main()
 	link_t* t = initLink(n);
 	display(t);
 	int round = 1;
+	link_t* r = t;//用于记录每轮开始位置
 	//当且只含有一个节点时退出循环
 	while(t->next != t)
 	{
-		printf("第%d轮开始，从编号为%d的人开始", round, t->num);
-		shootNum = rand()%n + 1;
+		printf("第%d轮开始，从编号为%d的人开始", round, r->num);
+		int shootNum = rand()%n + 1;
 		printf("枪在第%d次扣动扳机会响\n", shootNum);
-		link_t* tmp = t;
+		link_t* tmp = r;
 		//循环遍历找到要删除节点的上一个节点
 		for(int i = 1;i < shootNum-1;i ++)
 		{
-			
 			tmp = tmp->next;
 		}
+		//将要删除节点从链表中删除，并释放其占用空间
+		printf("编号为%d的赌徒退出游戏，剩余赌徒编号依次为:\n", tmp->next->num);
+		link_t* del = tmp->next;
+		tmp->next = tmp->next->next;
+		if(del == t)
+		{
+			t = t->next;
+		}
+		free(del);
+		display(t);
+		//赋值新一轮开始的位置
+		r = tmp->next;
+		round ++;
 	}
+	printf("最终胜利的赌徒编号是: %d\n", t->num);
 	return 0;
 }
 
