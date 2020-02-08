@@ -1,0 +1,7 @@
+st = list()
+st.append(11)
+st.append(22)
+st.append(33)
+print(st)
+x = st.pop()
+print(x, st)
