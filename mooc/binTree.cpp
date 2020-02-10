@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <stack>
 using namespace std;
 template<class Elem>
 //链式二叉树结构体
@@ -31,11 +32,39 @@ protected:
         callPreOrder(r->left);
         callPreOrder(r->right);
     }
+    void itPreOrder(BinNode<Elem>* r){//迭代方法代替递归
+        stack<BinNode<Elem>*> st;//将节点的地址压入栈中
+        if(r == NULL) return;
+        while(r){
+            cout << r->data << " ";
+            st.push(r);//压栈
+            r = r->left;
+            while(r == NULL && !st.empty()){//左or右子树遍历完,栈是否为空
+                r = st.top();//栈顶元素
+                st.pop();//出栈
+                r = r->right;//后撤步
+            }
+        }
+    }
     void callInOrder(BinNode<Elem>* r){
         if(r == NULL) return;//凡是指针都有可能为空
         callInOrder(r->left);
         cout << r->data << ' ';
         callInOrder(r->right);
+    }
+    void itInOrder(BinNode<Elem>* r){//迭代方法代替递归
+        stack<BinNode<Elem>*> st;//将节点的地址压入栈中
+        if(r == NULL) return;
+        while(r){
+            st.push(r);//压栈
+            r = r->left;
+            while(r == NULL && !st.empty()){//左or右子树遍历完,栈是否为空
+                r = st.top();//栈顶元素
+                st.pop();//出栈
+                cout << r->data << " ";
+                r = r->right;//后撤步
+            }
+        }
     }
     void callPostOrder(BinNode<Elem>* r){
         if(r == NULL) return;//凡是指针都有可能为空
@@ -71,12 +100,14 @@ public:
     ~BinTree(){/*TODO*/}
     //前序遍历
     void preOrder(){
-        callPreOrder(root);
+        //callPreOrder(root);
+        itPreOrder(root);
         cout << endl;
     }
     //中序遍历
     void inOrder(){
-        callInOrder(root);
+        //callInOrder(root);
+        itInOrder(root);
         cout << endl;
     }
     //中序遍历
